@@ -1,0 +1,39 @@
+{
+  "name": "table-ahead",
+  "version": "0.0.0",
+  "description": "get typeahead search fields for each column of a table",
+  "main": "index.js",
+  "scripts": {
+    "example": "beefy example/basic.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@git.lincx.me:modules/table-ahead.git"
+  },
+  "devDependencies": {
+    "browserify": "~2.35.1",
+    "coffee-script": "~1.6.3",
+    "beefy": "~0.4.2",
+    "coffeeify": "~0.5.2"
+  },
+  "dependencies": {
+    "cssify": "0.4.1",
+    "fusejs": "0.0.1"
+  },
+  "keywords": [
+    "table",
+    "typeahead",
+    "search",
+    "columns"
+  ],
+  "author": "Tyler Bushnell",
+  "license": "BSD",
+  "browser": "./lib/index.coffee",
+  "browserify": {
+    "transform": [
+      "coffeeify",
+      "cssify"
+    ]
+  }
+}
