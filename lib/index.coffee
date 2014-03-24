@@ -85,7 +85,6 @@ class TableAhead
     return s
 
   toggleRows: (show) ->
-    console.log show
     if show is 'all'
       for row in @tdata
         row._tr.style.display = 'table-row'
