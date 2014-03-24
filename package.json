@@ -18,8 +18,7 @@
     "coffeeify": "~0.5.2"
   },
   "dependencies": {
-    "cssify": "0.4.1",
-    "fusejs": "0.0.1"
+    "cssify": "0.4.1"
   },
   "keywords": [
     "table",
