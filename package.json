@@ -1,6 +1,6 @@
 {
   "name": "table-ahead",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "get typeahead search fields for each column of a table",
   "main": "index.js",
   "scripts": {
