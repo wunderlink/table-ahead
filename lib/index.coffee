@@ -34,25 +34,8 @@ class TableAhead
     if value?
       tmp = document.createElement('div')
       tmp.innerHTML = value
-      value = @findText tmp
+      value = tmp.textContent
     return value
-
-  findText: (el) ->
-    target = el
-    while target.nodeName != '#text'
-      if target.childNodes.length == 0
-        break
-      if target.childNodes.length == 1
-        target = target.firstChild
-      else
-        for next, i in target.childNodes
-          if next.nodeName != '#text' or (next.nodeValue != '' and next.nodeValue.trim() != '')
-            target = next
-            break
-    val = ''
-    if target.nodeValue != null
-      val = target.nodeValue.trim()
-    return val
 
   buildFuse: (handle) ->
     if handle is 'search_all'

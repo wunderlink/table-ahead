@@ -4,7 +4,7 @@
   "description": "get typeahead search fields for each column of a table",
   "main": "index.js",
   "scripts": {
-    "example": "beefy example/basic.js",
+    "example": "beefy --live example/basic.coffee",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
