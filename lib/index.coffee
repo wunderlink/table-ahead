@@ -27,6 +27,8 @@ class TableAhead
       @controls[col.property] = @buildControl(col)
     @controls['search_all'] = @buildControl(search_all)
 
+    console.log 'CNTRLS', @controls
+
   formatData: (row, col) ->
     value = row[col.property]
     if col.template?
@@ -56,16 +58,35 @@ class TableAhead
     s.type = 'text'
     s.setAttribute('data-handle', col.property)
     s.onkeyup = (e) ->
-      handle = this.getAttribute('data-handle')
-      if !_this.fuses[handle]?
-        _this.fuses[handle] = _this.buildFuse( handle )
-      if this.value is ''
-        _this.toggleRows( 'all' )
-      else
-        matches = _this.fuses[handle].search( this.value )
-        _this.toggleRows( matches )
-
+      _this.narrowRows()
     return s
+
+  narrowRows: ->
+    matched = []
+    first = true
+    for handle, item of @controls
+      matchAll = true
+      if !@fuses[handle]?
+        @fuses[handle] = @buildFuse( handle )
+      if item.value isnt ''
+        matches = @fuses[handle].search( item.value )
+        if first
+          first = false
+          matched = matches
+        else
+          intersect = []
+          console.log 'matches', matches
+          console.log 'matched', matched
+          for match in matched
+            for newMatch in matches
+              if match is newMatch
+                intersect.push newMatch
+          matched = intersect
+    if first
+      @toggleRows( 'all' )
+    else
+      @toggleRows( matched )
+
 
   toggleRows: (show) ->
     if show is 'all'
@@ -78,7 +99,6 @@ class TableAhead
         row._tr.style.display = 'table-row'
 
   add: (obj, tr) ->
-    #r = @formatDataRow obj
     n = {}
     for col in @columns
       n[col.property] = @formatData obj, col
