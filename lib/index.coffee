@@ -47,7 +47,7 @@ class TableAhead
     else
       keys = [handle]
     options =
-      threshold: 0.1
+      threshold: 0.3
       keys: keys
     fuse = new Fuse(@tdata, options)
     return fuse
