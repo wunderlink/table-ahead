@@ -3,8 +3,6 @@ require('./style.css')
 Fuse = require('../vendor/fuse.min.js')
 
 
-module.exports = (columns) ->
-  return new TableAhead columns
 
 class TableAhead
   id: ''
@@ -26,8 +24,6 @@ class TableAhead
     for col in columns
       @controls[col.property] = @buildControl(col)
     @controls['search_all'] = @buildControl(search_all)
-
-    console.log 'CNTRLS', @controls
 
   formatData: (row, col) ->
     value = row[col.property]
@@ -62,30 +58,36 @@ class TableAhead
     return s
 
   narrowRows: ->
-    matched = []
-    first = true
-    for handle, item of @controls
-      matchAll = true
-      if !@fuses[handle]?
-        @fuses[handle] = @buildFuse( handle )
-      if item.value isnt ''
-        matches = @fuses[handle].search( item.value )
-        if first
-          first = false
-          matched = matches
-        else
-          intersect = []
-          console.log 'matches', matches
-          console.log 'matched', matched
-          for match in matched
-            for newMatch in matches
-              if match is newMatch
-                intersect.push newMatch
-          matched = intersect
-    if first
+    empty = true
+    matches = []
+    for handle, val of @controls
+      if val.value isnt ''
+        empty = false
+        matched = @checkColumn handle, val
+        matches = @mergeMatches matches, matched
+    if empty
       @toggleRows( 'all' )
     else
-      @toggleRows( matched )
+      @toggleRows( matches )
+
+  checkColumn: (handle, item) ->
+    if !@fuses[handle]?
+      @fuses[handle] = @buildFuse( handle )
+    if item.value isnt ''
+      matches = @fuses[handle].search( item.value )
+      return matches
+    return []
+
+  mergeMatches: (matched, newMatches) ->
+    intersect = []
+    if matched.length < 1
+      console.log "ONLY MATCH", newMatches
+      return newMatches
+    for match in matched
+      for newMatch in newMatches
+        if match is newMatch
+          intersect.push newMatch
+    return intersect
 
 
   toggleRows: (show) ->
@@ -104,3 +106,6 @@ class TableAhead
       n[col.property] = @formatData obj, col
     n._tr = tr
     @tdata.push n
+
+
+module.exports = TableAhead
