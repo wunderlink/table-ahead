@@ -5,13 +5,6 @@ Fuse = require('../vendor/fuse.min.js')
 
 
 class TableAhead
-  id: ''
-  table: ''
-  tdata: []
-  cols: []
-  fuses: {}
-  controls: {}
-  controlHolder: ''
   constructor: (columns) ->
     @.add = @.add.bind(@)
     @columns = columns
@@ -21,6 +14,9 @@ class TableAhead
       title: 'Search All'
 
     @columns = columns
+    @tdata = []
+    @fuses = {}
+    @controls = {}
     for col in columns
       @controls[col.property] = @buildControl(col)
     @controls['search_all'] = @buildControl(search_all)
@@ -54,6 +50,8 @@ class TableAhead
     s.type = 'text'
     s.setAttribute('data-handle', col.property)
     s.onkeyup = (e) ->
+      for handle, val of _this.controls
+        console.log "VAL", val.value
       _this.narrowRows()
     return s
 
@@ -61,6 +59,7 @@ class TableAhead
     empty = true
     matches = []
     for handle, val of @controls
+      console.log "VAL", val.value
       if val.value isnt ''
         empty = false
         matched = @checkColumn handle, val
