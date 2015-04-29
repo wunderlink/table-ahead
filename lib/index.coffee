@@ -5,7 +5,7 @@ Fuse = require('../vendor/fuse.min.js')
 
 
 class TableAhead
-  constructor: (columns) ->
+  constructor: (columns, opts={}) ->
     @.add = @.add.bind(@)
     @columns = columns
 
@@ -13,6 +13,9 @@ class TableAhead
       property: 'search_all'
       title: 'Search All'
 
+    @fuzzyMatch = true
+    if opts.fuzzyMatch
+      @fuzzyMatch = opts.fuzzyMatch
     @columns = columns
     @tdata = []
     @fuses = {}
@@ -70,17 +73,25 @@ class TableAhead
       @toggleRows( matches )
 
   checkColumn: (handle, item) ->
-    if !@fuses[handle]?
-      @fuses[handle] = @buildFuse( handle )
-    if item.value isnt ''
-      matches = @fuses[handle].search( item.value )
+    if @fuzzyMatch
+      matches = @tdata.filter (row) ->
+        prop = row[handle]
+        val = item.value
+        match = typeof prop == 'string' && prop.toLowerCase().indexOf(val.toLowerCase()) > -1
+        if match
+          return row
       return matches
+    else
+      if !@fuses[handle]?
+        @fuses[handle] = @buildFuse( handle )
+      if item.value isnt ''
+        matches = @fuses[handle].search( item.value )
+        return matches
     return []
 
   mergeMatches: (matched, newMatches) ->
     intersect = []
     if matched.length < 1
-      console.log "ONLY MATCH", newMatches
       return newMatches
     for match in matched
       for newMatch in newMatches
