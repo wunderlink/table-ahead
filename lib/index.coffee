@@ -53,8 +53,6 @@ class TableAhead
     s.type = 'text'
     s.setAttribute('data-handle', col.property)
     s.onkeyup = (e) ->
-      for handle, val of _this.controls
-        console.log "VAL", val.value
       _this.narrowRows()
     return s
 
@@ -62,7 +60,6 @@ class TableAhead
     empty = true
     matches = []
     for handle, val of @controls
-      console.log "VAL", val.value
       if val.value isnt ''
         empty = false
         matched = @checkColumn handle, val
