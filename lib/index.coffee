@@ -59,8 +59,16 @@ class TableAhead
   narrowRows: ->
     empty = true
     matches = []
+    if @controls.search_all and @controls.search_all.value isnt ''
+      empty = false
+      for h, v of @controls
+        if h isnt 'search_all'
+          m = @checkColumn h, @controls.search_all
+          if m.length > 0
+            matches = matches.concat m
+
     for handle, val of @controls
-      if val.value isnt ''
+      if val.value isnt '' and handle isnt 'search_all'
         empty = false
         matched = @checkColumn handle, val
         matches = @mergeMatches matches, matched
